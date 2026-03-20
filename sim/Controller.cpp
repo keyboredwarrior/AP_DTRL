@@ -1,6 +1,7 @@
 #include "Controller.h"
 #include "sim/SimCharacter.h"
 #include "util/FileUtil.h"
+#include "util/AssertUtil.h"
 
 cController::cController()
 {
@@ -14,7 +15,7 @@ cController::~cController()
 
 void cController::Init(cSimCharacter* character)
 {
-	assert(character != nullptr);
+	AP_DTRL_ASSERT(character != nullptr);
 	Clear();
 	mChar = character;
 }

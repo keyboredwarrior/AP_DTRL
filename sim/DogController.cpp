@@ -6,6 +6,7 @@
 #include "sim/RBDUtil.h"
 #include "util/FileUtil.h"
 #include "util/Util.h"
+#include "util/AssertUtil.h"
 
 //#define DOG_CTRL_PROFILER
 
@@ -279,7 +280,7 @@ void cDogController::TransitionState(int state)
 
 void cDogController::TransitionState(int state, double phase)
 {
-	assert(state >= 0 && state < eStateMax);
+	AP_DTRL_ASSERT(state >= 0 && state < eStateMax);
 	cTerrainRLCharController::TransitionState(state, phase);
 	tStateParams params = GetCurrParams();
 	SetStateParams(params);
@@ -315,7 +316,7 @@ void cDogController::CommandAction(int action_id)
 	}
 	else
 	{
-		assert(false); // invalid action
+		AP_DTRL_ASSERT(false); // invalid action
 	}
 }
 
@@ -351,7 +352,7 @@ void cDogController::BuildCtrlOptParams(int ctrl_params_idx, Eigen::VectorXd& ou
 
 void cDogController::SetCtrlParams(int ctrl_params_id, const Eigen::VectorXd& params)
 {
-	assert(params.size() == GetNumParams());
+	AP_DTRL_ASSERT(params.size() == GetNumParams());
 	Eigen::VectorXd& ctrl_params = mCtrlParams[ctrl_params_id];
 	ctrl_params = params;
 	PostProcessParams(ctrl_params);
@@ -366,7 +367,7 @@ void cDogController::SetCtrlParams(int ctrl_params_id, const Eigen::VectorXd& pa
 
 void cDogController::SetCtrlOptParams(int ctrl_params_id, const Eigen::VectorXd& opt_params)
 {
-	assert(opt_params.size() == GetNumOptParams());
+	AP_DTRL_ASSERT(opt_params.size() == GetNumOptParams());
 	Eigen::VectorXd& ctrl_params = mCtrlParams[ctrl_params_id];
 	SetOptParams(opt_params, ctrl_params);
 
@@ -380,7 +381,7 @@ void cDogController::SetCtrlOptParams(int ctrl_params_id, const Eigen::VectorXd&
 
 void cDogController::BuildActionOptParams(int action_id, Eigen::VectorXd& out_params) const
 {
-	assert(action_id >= 0 && action_id < GetNumActions());
+	AP_DTRL_ASSERT(action_id >= 0 && action_id < GetNumActions());
 	const tBlendAction& action = mActions[action_id];
 	Eigen::VectorXd params;
 	BlendCtrlParams(action, params);
@@ -396,7 +397,7 @@ int cDogController::GetNumParams() const
 int cDogController::GetNumOptParams() const
 {
 	int num_params = GetNumParams();
-	assert(gNumParamInfo == num_params);
+	AP_DTRL_ASSERT(gNumParamInfo == num_params);
 
 	int num_opt_params = 0;
 	for (int i = 0; i < num_params; ++i)
@@ -457,7 +458,7 @@ void cDogController::FetchOptParamScale(Eigen::VectorXd& out_scale) const
 		}
 	}
 
-	assert(idx == num_params);
+	AP_DTRL_ASSERT(idx == num_params);
 	GetOptParams(param_buffer, out_scale);
 }
 
@@ -534,7 +535,7 @@ void cDogController::ReadParams(const std::string& file)
 
 void cDogController::SetParams(const Eigen::VectorXd& params)
 {
-	assert(params.size() == GetNumParams());
+	AP_DTRL_ASSERT(params.size() == GetNumParams());
 	mCurrAction.mParams = params;
 	PostProcessParams(mCurrAction.mParams);
 }
@@ -551,8 +552,8 @@ void cDogController::SetOptParams(const Eigen::VectorXd& opt_params)
 
 void cDogController::SetOptParams(const Eigen::VectorXd& opt_params, Eigen::VectorXd& out_params) const
 {
-	assert(opt_params.size() == GetNumOptParams());
-	assert(gNumParamInfo == GetNumParams());
+	AP_DTRL_ASSERT(opt_params.size() == GetNumOptParams());
+	AP_DTRL_ASSERT(gNumParamInfo == GetNumParams());
 
 	int num_params = GetNumParams();
 	int opt_idx = 0;
@@ -564,14 +565,14 @@ void cDogController::SetOptParams(const Eigen::VectorXd& opt_params, Eigen::Vect
 			++opt_idx;
 		}
 	}
-	assert(opt_idx == GetNumOptParams());
+	AP_DTRL_ASSERT(opt_idx == GetNumOptParams());
 
 	PostProcessParams(out_params);
 }
 
 void cDogController::BuildFromMotion(int ctrl_params_idx, const cMotion& motion)
 {
-	assert(motion.IsValid());
+	AP_DTRL_ASSERT(motion.IsValid());
 	double dur = motion.GetDuration();
 	int num_states = GetNumStates();
 	double trans_time = dur / num_states;
@@ -674,7 +675,7 @@ bool cDogController::LoadControllers(const std::string& file)
 	else
 	{
 		printf("failed to parse controllers from %s\n", file.c_str());
-		assert(false);
+		AP_DTRL_ASSERT(false);
 	}
 
 	return succ;
@@ -700,7 +701,7 @@ bool cDogController::ParseControllers(const Json::Value& root)
 			if (!root["DefaultAction"].isNull())
 			{
 				mDefaultAction = root["DefaultAction"].asInt();
-				assert(mDefaultAction >= 0 && mDefaultAction < num_action);
+				AP_DTRL_ASSERT(mDefaultAction >= 0 && mDefaultAction < num_action);
 			}
 		}
 
@@ -717,7 +718,7 @@ bool cDogController::ParseControllerFiles(const Json::Value& root)
 {
 	bool succ = true;
 	std::vector<std::string> files;
-	assert(root.isArray());
+	AP_DTRL_ASSERT(root.isArray());
 
 	int num_files = root.size();
 	files.resize(num_files);
@@ -732,7 +733,7 @@ bool cDogController::ParseControllerFiles(const Json::Value& root)
 bool cDogController::ParseActions(const Json::Value& root)
 {
 	bool succ = true;
-	assert(root.isArray());
+	AP_DTRL_ASSERT(root.isArray());
 
 	int num_actions = root.size();
 	for (int a = 0; a < num_actions; ++a)
@@ -755,7 +756,7 @@ bool cDogController::ParseActions(const Json::Value& root)
 	if (!succ)
 	{
 		printf("failed to parse actions\n");
-		assert(false);
+		AP_DTRL_ASSERT(false);
 	}
 	return succ;
 }
@@ -920,8 +921,8 @@ void cDogController::ApplyFeedback()
 		eStateParamHip,
 		eStateParamShoulder
 	};
-	assert(sizeof(end_effectors) / sizeof(end_effectors[0]) == num_joints);
-	assert(sizeof(params) / sizeof(params[0]) == num_joints);
+	AP_DTRL_ASSERT(sizeof(end_effectors) / sizeof(end_effectors[0]) == num_joints);
+	AP_DTRL_ASSERT(sizeof(params) / sizeof(params[0]) == num_joints);
 
 	tVector com_vel = mChar->CalcCOMVel();
 	for (int j = 0; j < num_joints; ++j)
@@ -1016,7 +1017,7 @@ void cDogController::ApplyVirtualForces(Eigen::VectorXd& out_tau)
 			while (curr_id != cSimDog::eJointRoot
 				&& curr_id != cSimDog::eJointTorso)
 			{
-				assert(curr_id != cKinTree::gInvalidJointID);
+				AP_DTRL_ASSERT(curr_id != cKinTree::gInvalidJointID);
 				int offset = cKinTree::GetParamOffset(joint_mat, curr_id);
 				int size = cKinTree::GetParamSize(joint_mat, curr_id);
 				const auto curr_J = mJacobian.block(0, offset, cSpAlg::gSpVecSize, size);
@@ -1082,7 +1083,7 @@ tVector cDogController::GetFrontForce() const
 
 bool cDogController::CheckContact(cSimDog::eJoint joint_id) const
 {
-	assert(joint_id != cSimDog::eJointInvalid);
+	AP_DTRL_ASSERT(joint_id != cSimDog::eJointInvalid);
 	const auto& body_part = mChar->GetBodyPart(joint_id);
 	bool contact = body_part->IsInContact();
 	return contact;
@@ -1111,7 +1112,7 @@ tVector cDogController::GetEffectorVF(cSimDog::eJoint joint_id) const
 		force = GetFrontForce();
 		break;
 	default:
-		assert(false); // unsupported effector
+		AP_DTRL_ASSERT(false); // unsupported effector
 		break;
 	}
 	return force;
@@ -1188,8 +1189,8 @@ void cDogController::GetOptParams(const Eigen::VectorXd& ctrl_params, Eigen::Vec
 {
 	int num_params = GetNumParams();
 	int num_opt_params = GetNumOptParams();
-	assert(ctrl_params.size() == num_params);
-	assert(gNumParamInfo == num_params);
+	AP_DTRL_ASSERT(ctrl_params.size() == num_params);
+	AP_DTRL_ASSERT(gNumParamInfo == num_params);
 
 	out_opt_params.resize(num_opt_params);
 
@@ -1202,12 +1203,12 @@ void cDogController::GetOptParams(const Eigen::VectorXd& ctrl_params, Eigen::Vec
 			++opt_idx;
 		}
 	}
-	assert(opt_idx == num_opt_params);
+	AP_DTRL_ASSERT(opt_idx == num_opt_params);
 }
 
 std::string cDogController::BuildOptParamsJson(const Eigen::VectorXd& opt_params) const
 {
-	assert(opt_params.size() == GetNumOptParams());
+	AP_DTRL_ASSERT(opt_params.size() == GetNumOptParams());
 	Eigen::VectorXd param_buffer = mCurrAction.mParams;
 	SetOptParams(opt_params, param_buffer);
 	std::string json = BuildParamsJson(param_buffer);
@@ -1353,19 +1354,19 @@ void cDogController::PostProcessParams(Eigen::VectorXd& out_params) const
 
 bool cDogController::IsOptParam(int param_idx) const
 {
-	assert(param_idx >= 0 && param_idx < gNumParamInfo);
+	AP_DTRL_ASSERT(param_idx >= 0 && param_idx < gNumParamInfo);
 	return gParamInfo[param_idx].mIsOptParam;
 }
 
 double cDogController::GetParamBoundMin(int param_idx) const
 {
-	assert(param_idx >= 0 && param_idx < gNumParamInfo);
+	AP_DTRL_ASSERT(param_idx >= 0 && param_idx < gNumParamInfo);
 	return gParamInfo[param_idx].mMin;
 }
 
 double cDogController::GetParamBoundMax(int param_idx) const
 {
-	assert(param_idx >= 0 && param_idx < gNumParamInfo);
+	AP_DTRL_ASSERT(param_idx >= 0 && param_idx < gNumParamInfo);
 	return gParamInfo[param_idx].mMax;
 }
 

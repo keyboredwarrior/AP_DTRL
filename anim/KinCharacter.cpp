@@ -1,5 +1,4 @@
 #include "KinCharacter.h"
-#include <assert.h>
 
 const double gDiffTimeStep = 1 / 60.0;
 

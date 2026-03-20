@@ -1,5 +1,6 @@
 #include "Perturb.h"
 #include "sim/SimObj.h"
+#include "util/AssertUtil.h"
 
 tPerturb tPerturb::BuildForce()
 {
@@ -17,7 +18,7 @@ tPerturb::tPerturb(ePerturb type, cSimObj* obj, const tVector& local_pos,
 	const tVector& perturb, double duration)
 	: tPerturb()
 {
-	assert(type != ePerturbInvalid);
+	AP_DTRL_ASSERT(type != ePerturbInvalid);
 	mType = type;
 	mObj = obj;
 	mLocalPos = local_pos;
@@ -61,19 +62,19 @@ void tPerturb::Update(double time_step)
 		ApplyTorque();
 		break;
 	default:
-		assert(false); // unsupported perturb type
+		AP_DTRL_ASSERT(false); // unsupported perturb type
 		break;
 	}
 }
 
 void tPerturb::ApplyForce()
 {
-	assert(mType == ePerturbForce);
+	AP_DTRL_ASSERT(mType == ePerturbForce);
 	mObj->ApplyForce(mPerturb, mLocalPos);
 }
 
 void tPerturb::ApplyTorque()
 {
-	assert(mType == ePerturbTorque);
+	AP_DTRL_ASSERT(mType == ePerturbTorque);
 	mObj->ApplyTorque(mPerturb);
 }

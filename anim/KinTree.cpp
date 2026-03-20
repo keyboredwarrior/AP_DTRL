@@ -4,6 +4,7 @@
 
 #include "util/FileUtil.h"
 #include "sim/RBDUtil.h"
+#include "util/AssertUtil.h"
 
 const int cKinTree::gPosDims = 2;
 const int cKinTree::gInvalidJointID = -1;
@@ -73,7 +74,7 @@ int cKinTree::GetRoot(const Eigen::MatrixXd& joint_desc)
 			return i;
 		}
 	}
-	assert(false);
+	AP_DTRL_ASSERT(false);
 	return gInvalidJointID;
 	*/
 }
@@ -96,7 +97,7 @@ void cKinTree::FindChildren(const Eigen::MatrixXd& joint_desc, int joint_id, Eig
 			if (num_children >= max_size)
 			{
 				printf("Too many children, max = %i", max_size);
-				assert(false);
+				AP_DTRL_ASSERT(false);
 				return;
 			}
 		}
@@ -203,7 +204,7 @@ bool cKinTree::ParseBodyShape(const std::string& str, cKinTree::eBodyShape& out_
 	else
 	{
 		printf("Unsupported body shape %s\n", str.c_str());
-		assert(false);
+		AP_DTRL_ASSERT(false);
 	}
 	return succ;
 }
@@ -250,7 +251,7 @@ bool cKinTree::LoadDrawShapeDefs(const std::string& char_file, Eigen::MatrixXd& 
 	if (!succ)
 	{
 		printf("Failed to load draw shape definition from %s\n", char_file.c_str());
-		assert(false);
+		AP_DTRL_ASSERT(false);
 	}
 
 	return succ;
@@ -285,7 +286,7 @@ bool cKinTree::ParseDrawShapeDef(const Json::Value& root, tBodyDef& out_def)
 
 tVector cKinTree::CalcBodyPartPos(const Eigen::MatrixXd& joint_mat, const Eigen::VectorXd& state, const Eigen::MatrixXd& body_defs, int part_id)
 {
-	assert(IsValidBody(body_defs, part_id));
+	AP_DTRL_ASSERT(IsValidBody(body_defs, part_id));
 	tMatrix body_joint_trans = BodyJointTrans(body_defs, part_id);
 	tMatrix joint_to_world_trans = JointWorldTrans(joint_mat, state, part_id);
 	
@@ -371,7 +372,7 @@ tVector cKinTree::GetBodyLocalCoM(const Eigen::MatrixXd& body_defs, int part_id)
 		com.setZero();
 		break;
 	default:
-		assert(false); // unsupported
+		AP_DTRL_ASSERT(false); // unsupported
 		break;
 	}
 
@@ -442,7 +443,7 @@ bool cKinTree::Load(const Json::Value& root, Eigen::MatrixXd& out_joint_mat)
 			{
 				printf("Parent id must be < child id, parent id: %i, child id: %i\n", parent_id, j);
 				out_joint_mat.resize(0, 0);
-				assert(false);
+				AP_DTRL_ASSERT(false);
 
 				return false;
 			}
@@ -607,7 +608,7 @@ Eigen::VectorXi cKinTree::FindJointChain(const Eigen::MatrixXd& joint_mat, int j
 		if (buffer_idx >= max_length)
 		{
 			printf("Exceeded maximum chain length %i\n", max_length);
-			assert(false);
+			AP_DTRL_ASSERT(false);
 			return chain;
 		}
 
@@ -625,7 +626,7 @@ Eigen::VectorXi cKinTree::FindJointChain(const Eigen::MatrixXd& joint_mat, int j
 
 	bool found = common_ancestor != gInvalidJointID;
 	// tree should always connected?
-	assert(found);
+	AP_DTRL_ASSERT(found);
 
 	if (found)
 	{
@@ -776,7 +777,7 @@ void cKinTree::SetJointParams(const Eigen::MatrixXd& joint_mat, int j, const Eig
 {
 	int offset = cKinTree::GetParamOffset(joint_mat, j);
 	int dim = cKinTree::GetParamSize(joint_mat, j);
-	assert(dim == params.size());
+	AP_DTRL_ASSERT(dim == params.size());
 	out_state.block(offset, 0, dim, 1) = params;
 }
 
@@ -789,7 +790,7 @@ cKinTree::eJointType cKinTree::GetJointType(const Eigen::MatrixXd& joint_mat, in
 int cKinTree::GetParent(const Eigen::MatrixXd& joint_mat, int joint_id)
 {
 	int parent = static_cast<int>(joint_mat(joint_id, cKinTree::eJointDescParent));
-	assert(parent < joint_id); // joints should always be ordered as such
+	AP_DTRL_ASSERT(parent < joint_id); // joints should always be ordered as such
 								// since some algorithms will assume this ordering
 	return parent;
 }
@@ -832,7 +833,7 @@ tVector cKinTree::GetJointOffset(const Eigen::MatrixXd& joint_mat, const Eigen::
 		offset.segment(0, 2) = (is_root) ? state.segment(param_offset, 2) : Eigen::Vector2d(0, 0);
 		break;
 	default:
-		assert(false); // unsupported joint
+		AP_DTRL_ASSERT(false); // unsupported joint
 		break;
 	}
 	
@@ -856,7 +857,7 @@ void cKinTree::SetJointOffset(const Eigen::MatrixXd& joint_mat, int joint_id, co
 		out_state.segment(param_offset, 2) = offset.segment(0, 2);
 		break;
 	default:
-		assert(false && "No offset for this joint type"); // no offset for joint type
+		AP_DTRL_ASSERT(false && "No offset for this joint type"); // no offset for joint type
 		break;
 	}
 }
@@ -885,7 +886,7 @@ double cKinTree::GetJointTheta(const Eigen::MatrixXd& joint_mat, const Eigen::Ve
 		theta = (is_root) ? state(param_offset + 2) : 0;
 		break;
 	default:
-		assert(false); // unsupported joint
+		AP_DTRL_ASSERT(false); // unsupported joint
 		break;
 	}
 	return theta;
@@ -907,7 +908,7 @@ void cKinTree::SetJointTheta(const Eigen::MatrixXd& joint_mat, int joint_id, dou
 		out_state(param_offset + 2) = theta;
 		break;
 	default:
-		assert(false); // no offset for joint type
+		AP_DTRL_ASSERT(false); // no offset for joint type
 		break;
 	}
 }

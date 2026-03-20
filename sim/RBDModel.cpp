@@ -2,6 +2,7 @@
 #include "RBDUtil.h"
 #include "anim/KinTree.h"
 #include "util/Util.h"
+#include "util/AssertUtil.h"
 
 //#define ENABLE_RBD_PROFILER
 
@@ -15,7 +16,7 @@ cRBDModel::~cRBDModel()
 
 void cRBDModel::Init(const Eigen::MatrixXd& joint_mat, const Eigen::MatrixXd& body_defs, const tVector& gravity)
 {
-	assert(joint_mat.rows() == body_defs.rows());
+	AP_DTRL_ASSERT(joint_mat.rows() == body_defs.rows());
 	mGravity = gravity;
 	mJointMat = joint_mat;
 	mBodyDefs = body_defs;
@@ -111,7 +112,7 @@ Eigen::MatrixXd& cRBDModel::GetInertiaBuffer()
 
 tMatrix cRBDModel::GetChildParentMat(int j) const
 {
-	assert(j >= 0 && j < GetNumJoints());
+	AP_DTRL_ASSERT(j >= 0 && j < GetNumJoints());
 	tMatrix trans;
 	int r = static_cast<int>(trans.rows());
 	int c = static_cast<int>(trans.cols());
@@ -152,7 +153,7 @@ tMatrix cRBDModel::GetJointWorldMat(int j) const
 
 cSpAlg::tSpTrans cRBDModel::GetSpWorldJointTrans(int j) const
 {
-	assert(j >= 0 && j < GetNumJoints());
+	AP_DTRL_ASSERT(j >= 0 && j < GetNumJoints());
 	cSpAlg::tSpTrans trans = cSpAlg::GetTrans(mSpWorldJointTransArr, j);
 	return trans;
 }
@@ -165,7 +166,7 @@ cSpAlg::tSpTrans cRBDModel::GetSpJointWorldTrans(int j) const
 
 const Eigen::Block<const Eigen::MatrixXd> cRBDModel::GetJointSubspace(int j) const
 {
-	assert(j >= 0 && j < GetNumJoints());
+	AP_DTRL_ASSERT(j >= 0 && j < GetNumJoints());
 	int offset = cKinTree::GetParamOffset(mJointMat, j);
 	int dim = cKinTree::GetParamSize(mJointMat, j);
 	int r = static_cast<int>(mJointSubspaceArr.rows());

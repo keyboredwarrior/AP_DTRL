@@ -8,6 +8,7 @@
 #include "sim/SimCapsule.h"
 #include "sim/SimPlane.h"
 #include "sim/Joint.h"
+#include "util/AssertUtil.h"
 
 cWorld::tParams::tParams()
 {
@@ -146,7 +147,7 @@ cWorld::tConstraintHandle cWorld::AddJoint(cSimObj* obj0, cSimObj* obj1, const t
 		handle = AddPrismaticConstraint(obj0, obj1, params);
 		break;
 	default:
-		assert(false);
+		AP_DTRL_ASSERT(false);
 		printf("Unsupported constraint type\n");
 		break;
 	}
@@ -195,7 +196,7 @@ void cWorld::BuildConsFactor(ePlaneCons plane_cons, tVector& out_linear_factor, 
 		out_angular_factor = tVector(0, 0, 1, 0);
 		break;
 	default:
-		assert(false); // unsupported constraint
+		AP_DTRL_ASSERT(false); // unsupported constraint
 	}
 }
 

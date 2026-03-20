@@ -1,7 +1,7 @@
 #include "FileUtil.h"
-#include <assert.h>
 #include <cstdarg>
 #include <memory>
+#include "util/AssertUtil.h"
 #ifdef _LINUX_
 #include <iostream>
 #include <string.h>
@@ -19,7 +19,7 @@ FILE* cFileUtil::OpenFile(const char* path, const char* mode)
 	if (f == nullptr)
 	{
 		printf("Failed to open %s!\n", path);
-		assert(false); // failed to open file
+		AP_DTRL_ASSERT(false); // failed to open file
 	}
 	return f;
 }
@@ -45,7 +45,7 @@ void cFileUtil::DeleteFile(const char* file_name)
 	if (!succc)
 	{
 		printf("Failed to delete %s!\n", file_name);
-		assert(false); // failed to open file
+		AP_DTRL_ASSERT(false); // failed to open file
 	}
 }
 
@@ -68,7 +68,7 @@ void cFileUtil::DeleteFile(const std::string& filename)
 	if (err != 0)
 	{
 		printf("Failed to delete %s!\n", filename.c_str());
-		assert(false);
+		AP_DTRL_ASSERT(false);
 	}
 }
 

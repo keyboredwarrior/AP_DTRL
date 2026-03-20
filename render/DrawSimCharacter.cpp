@@ -11,6 +11,7 @@
 #include "render/DrawObj.h"
 #include "render/DrawPerturb.h"
 #include "render/GraphUtil.h"
+#include "util/AssertUtil.h"
 
 void cDrawSimCharacter::Draw(const cSimCharacter& character, const tVector& fill_tint, const tVector& line_col, bool enable_draw_shape)
 {
@@ -399,7 +400,7 @@ void cDrawSimCharacter::DrawSimBody(const cSimCharacter& character, const tVecto
 
 void cDrawSimCharacter::DrawShapes(const cSimCharacter& character, const tVector& fill_tint, const tVector& line_col)
 {
-	assert(character.HasDrawShapes());
+	AP_DTRL_ASSERT(character.HasDrawShapes());
 	const auto& shape_defs = character.GetDrawShapeDefs();
 	size_t num_shapes = shape_defs.rows();
 

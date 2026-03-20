@@ -1,5 +1,6 @@
 #include "CharTracer.h"
 #include "render/DrawUtil.h"
+#include "util/AssertUtil.h"
 
 const int gNumEndEffMarkers = 4;
 const double gMarkerSize = 0.075;
@@ -105,7 +106,7 @@ int cCharTracer::AddTrace(const tParams& params)
 	}
 	else
 	{
-		assert(false); // invalid trace parameters
+		AP_DTRL_ASSERT(false); // invalid trace parameters
 	}
 	return handle;
 }
@@ -146,7 +147,7 @@ void cCharTracer::BuildTrace(const tParams& params, tTrace& out_trace) const
 	const auto& character = params.mChar;
 	for (int i = 0; i < static_cast<int>(num_contacts); ++i)
 	{
-		assert(character->IsValidBodyPart(i));
+		AP_DTRL_ASSERT(character->IsValidBodyPart(i));
 		out_trace.mEndContact.push_back(false);
 	}
 }
@@ -224,7 +225,7 @@ tVector cCharTracer::CalcTracePos(const tTrace& trace) const
 		pos = character->GetBodyPart(trace.mParams.mTraceID)->GetPos();
 		break;
 	default:
-		assert(false); // unsupported trace type
+		AP_DTRL_ASSERT(false); // unsupported trace type
 		break;
 	}
 
@@ -233,13 +234,13 @@ tVector cCharTracer::CalcTracePos(const tTrace& trace) const
 
 const cCharTracer::tTrace& cCharTracer::GetTrace(int handle) const
 {
-	assert(handle >= 0 && handle < GetNumTraces());
+	AP_DTRL_ASSERT(handle >= 0 && handle < GetNumTraces());
 	return mTraces[handle];
 }
 
 cCharTracer::tTrace& cCharTracer::GetTrace(int handle)
 {
-	assert(handle >= 0 && handle < GetNumTraces());
+	AP_DTRL_ASSERT(handle >= 0 && handle < GetNumTraces());
 	return mTraces[handle];
 }
 
@@ -260,7 +261,7 @@ void cCharTracer::DrawTraceTraj(const tTrace& trace) const
 			const tVector& vert1 = trace.mPosTraj[i + 1];
 			int curr_col_idx = static_cast<int>(vert0[3]);
 
-			assert(curr_col_idx < trace.mParams.mColors.size());
+			AP_DTRL_ASSERT(curr_col_idx < trace.mParams.mColors.size());
 			const tVector& col = trace.mParams.mColors[curr_col_idx];
 			cDrawUtil::SetColor(col);
 			cDrawUtil::DrawLine(vert0, vert1);
@@ -279,7 +280,7 @@ void cCharTracer::DrawTraceEndPos(const tTrace& trace) const
 		const tVector & pos = end_pos.mPos;
 
 		int curr_col_idx = static_cast<int>(pos[3]);
-		assert(curr_col_idx < trace.mParams.mColors.size());
+		AP_DTRL_ASSERT(curr_col_idx < trace.mParams.mColors.size());
 		const tVector& col = trace.mParams.mColors[curr_col_idx];
 		cDrawUtil::SetColor(col);
 
@@ -300,7 +301,7 @@ void cCharTracer::DrawTraceEndPos(const tTrace& trace) const
 			cDrawUtil::DrawDisk(pos, marker_size, 16);
 			break;
 		default:
-			assert(false);
+			AP_DTRL_ASSERT(false);
 			break;
 		}
 	}

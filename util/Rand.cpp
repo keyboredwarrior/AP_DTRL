@@ -1,6 +1,5 @@
 #include "Rand.h"
 #include <time.h>
-#include <assert.h>
 #include <algorithm>
 
 cRand::cRand()

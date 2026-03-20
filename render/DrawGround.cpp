@@ -2,6 +2,7 @@
 #include "DrawUtil.h"
 #include "sim/GroundFlat.h"
 #include "sim/GroundVar2D.h"
+#include "util/AssertUtil.h"
 
 const double gMarkerSpacing = 0.20;
 const double gBigMarkerSpacing = gMarkerSpacing * 5;
@@ -20,7 +21,7 @@ void cDrawGround::Draw2D(const cGround* ground, const tVector& col, const tVecto
 		DrawVar2D(ground, col, bound_min, bound_max);
 		break;
 	default:
-		assert(false); // unsupported ground type
+		AP_DTRL_ASSERT(false); // unsupported ground type
 		break;
 	}
 }
@@ -37,14 +38,14 @@ void cDrawGround::Draw3D(const cGround* ground, const tVector& col, const tVecto
 		DrawVar3D(ground, col, bound_min, bound_max);
 		break;
 	default:
-		assert(false); // unsupported ground type
+		AP_DTRL_ASSERT(false); // unsupported ground type
 		break;
 	}
 }
 
 void cDrawGround::DrawFlat2D(const cGround* ground, const tVector& col, const tVector& bound_min, const tVector& bound_max)
 {
-	assert(ground->GetGroundType() == cGround::eGroundTypeFlat);
+	AP_DTRL_ASSERT(ground->GetGroundType() == cGround::eGroundTypeFlat);
 	
 	const cGroundFlat* ground_flat = reinterpret_cast<const cGroundFlat*>(ground);
 	tVector ground_origin = ground_flat->GetPos();
@@ -68,7 +69,7 @@ void cDrawGround::DrawFlat2D(const cGround* ground, const tVector& col, const tV
 
 void cDrawGround::DrawFlat3D(const cGround* ground, const tVector& col, const tVector& bound_min, const tVector& bound_max)
 {
-	assert(ground->GetGroundType() == cGround::eGroundTypeFlat);
+	AP_DTRL_ASSERT(ground->GetGroundType() == cGround::eGroundTypeFlat);
 
 	const cGroundFlat* ground_flat = reinterpret_cast<const cGroundFlat*>(ground);
 	tVector pos = ground_flat->GetPos();
@@ -83,7 +84,7 @@ void cDrawGround::DrawFlat3D(const cGround* ground, const tVector& col, const tV
 
 void cDrawGround::DrawVar2D(const cGround* ground, const tVector& col, const tVector& bound_min, const tVector& bound_max)
 {
-	assert(ground->GetGroundType() == cGround::eGroundTypeVar2D);
+	AP_DTRL_ASSERT(ground->GetGroundType() == cGround::eGroundTypeVar2D);
 
 	const cGroundVar2D* ground_var = reinterpret_cast<const cGroundVar2D*>(ground);
 	tVector ground_origin = ground_var->GetPos();
@@ -154,7 +155,7 @@ void cDrawGround::DrawVar2D(const cGround* ground, const tVector& col, const tVe
 
 void cDrawGround::DrawVar3D(const cGround* ground, const tVector& col, const tVector& bound_min, const tVector& bound_max)
 {
-	assert(ground->GetGroundType() == cGround::eGroundTypeVar2D);
+	AP_DTRL_ASSERT(ground->GetGroundType() == cGround::eGroundTypeVar2D);
 	const tVector tex_size = tVector(0.5, 0.5, 0, 0);
 
 	const cGroundVar2D* ground_var = reinterpret_cast<const cGroundVar2D*>(ground);

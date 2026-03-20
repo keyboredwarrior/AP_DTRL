@@ -1,5 +1,6 @@
 #include "TerrainGen2D.h"
 #include <algorithm>
+#include "util/AssertUtil.h"
 
 const float cTerrainGen2D::gVertSpacing = 0.1f;
 const std::string cTerrainGen2D::gTypeKey = "Type";
@@ -58,7 +59,7 @@ const cTerrainGen2D::tParamDef cTerrainGen2D::gParamDefs[] =
 cTerrainGen2D::tParams cTerrainGen2D::GetDefaultParams()
 {
 	tParams params;
-	assert(sizeof(gParamDefs) / sizeof(gParamDefs[0]) == eParamsMax);
+	AP_DTRL_ASSERT(sizeof(gParamDefs) / sizeof(gParamDefs[0]) == eParamsMax);
 	for (int i = 0; i < eParamsMax; ++i)
 	{
 		params[i] = gParamDefs[i].mDefaultVal;
@@ -141,7 +142,7 @@ void cTerrainGen2D::ParseType(const std::string& str, eType& out_type)
 	}
 	else
 	{
-		assert(false); // unsupported terrain type
+		AP_DTRL_ASSERT(false); // unsupported terrain type
 	}
 }
 
@@ -667,9 +668,9 @@ void cTerrainGen2D::OverlaySlopes(double delta_range, double delta_min, double d
 {
 	double curr_slope = init_slope;
 	double curr_delta_h = 0;
-	assert(beg_idx < out_data.size());
-	assert(end_idx <= out_data.size());
-	assert(delta_min < delta_max);
+	AP_DTRL_ASSERT(beg_idx < out_data.size());
+	AP_DTRL_ASSERT(end_idx <= out_data.size());
+	AP_DTRL_ASSERT(delta_min < delta_max);
 
 	double delta_mean = 0.5 * (delta_min + delta_max);
 	double delta_diff = 0.5 * (delta_max - delta_min);
@@ -696,8 +697,8 @@ void cTerrainGen2D::OverlayBumps(double min_delta_h, double max_delta_h, int beg
 {
 	double curr_slope = 0;
 	double curr_delta_h = 0;
-	assert(beg_idx < out_data.size());
-	assert(end_idx <= out_data.size());
+	AP_DTRL_ASSERT(beg_idx < out_data.size());
+	AP_DTRL_ASSERT(end_idx <= out_data.size());
 
 	for (int i = beg_idx; i < end_idx - 1; ++i)
 	{

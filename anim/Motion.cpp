@@ -1,8 +1,8 @@
 #include "Motion.h"
-#include <assert.h>
 #include <iostream>
 
 #include "util/FileUtil.h"
+#include "util/AssertUtil.h"
 
 const double gMinTime = 0;
 
@@ -47,13 +47,13 @@ bool cMotion::Load(const std::string& file)
 		else
 		{
 			printf("Failed to load motion from file %s\n", file.c_str());
-			assert(false);
+			AP_DTRL_ASSERT(false);
 		}
 	}
 	else
 	{
 		printf("Failed to parse Json from %s\n", file.c_str());
-		assert(false);
+		AP_DTRL_ASSERT(false);
 	}
 	return succ;
 }
@@ -120,7 +120,7 @@ bool cMotion::LoadJson(const Json::Value& root)
 		if (!motion[gFrameKey].isNull())
 		{
 			Json::Value frames = motion.get(gFrameKey, 0);
-			assert(frames.isArray());
+			AP_DTRL_ASSERT(frames.isArray());
 			int num_frames = frames.size();
 			
 			int data_size = 0;
@@ -138,7 +138,7 @@ bool cMotion::LoadJson(const Json::Value& root)
 				succ = ParseFrameJson(frames.get(f, 0), curr_frame);
 				if (succ)
 				{
-					assert(mFrames.cols() == curr_frame.size());
+					AP_DTRL_ASSERT(mFrames.cols() == curr_frame.size());
 					mFrames.row(f) = curr_frame;
 				}
 				else

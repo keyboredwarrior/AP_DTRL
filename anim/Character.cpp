@@ -1,9 +1,9 @@
 #include "Character.h"
-#include <assert.h>
 #include <json/json.h>
 
 #include "util/FileUtil.h"
 #include "util/JsonUtil.h"
+#include "util/AssertUtil.h"
 
 // Json keys
 const std::string gSkeletonKey = "Skeleton";
@@ -108,7 +108,7 @@ void cCharacter::BuildPose(Eigen::VectorXd& out_pose) const
 
 void cCharacter::SetPose(const Eigen::VectorXd& pose)
 {
-	assert(pose.size() == GetNumDof());
+	AP_DTRL_ASSERT(pose.size() == GetNumDof());
 	mPose = pose;
 }
 
@@ -288,7 +288,7 @@ void cCharacter::ResetParams()
 bool cCharacter::ParseState(const Json::Value& root, Eigen::VectorXd& out_state) const
 {
 	bool succ = cJsonUtil::ReadVectorJson(root, out_state);
-	assert(out_state.size() == GetNumDof());
+	AP_DTRL_ASSERT(out_state.size() == GetNumDof());
 	return succ;
 }
 

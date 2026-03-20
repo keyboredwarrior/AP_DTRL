@@ -1,6 +1,7 @@
 #include "IKSolver.h"
 #include <iostream>
 #include "anim/KinTree.h"
+#include "util/AssertUtil.h"
 
 const int gPosDims = 2;
 
@@ -32,8 +33,8 @@ void cIKSolver::Solve(const tProblem& prob, tSolution& out_soln)
 	Eigen::MatrixXd joint_desc = prob.mJointDesc;
 	const Eigen::MatrixXd& cons_desc = prob.mConsDesc;
 
-	assert(joint_desc.cols() == cKinTree::eJointDescMax);
-	assert(cons_desc.cols() == eConsDescMax);
+	AP_DTRL_ASSERT(joint_desc.cols() == cKinTree::eJointDescMax);
+	AP_DTRL_ASSERT(cons_desc.cols() == eConsDescMax);
 
 	int root_id = cKinTree::GetRoot(joint_desc);
 	if (root_id == cKinTree::gInvalidJointID)
@@ -332,7 +333,7 @@ Eigen::VectorXd cIKSolver::BuildErr(const Eigen::MatrixXd& joint_mat, const Eige
 			err = BuildConsThetaWorldErr(joint_mat, pose, cons_desc);
 			break;
 		default:
-			assert(false); // unsupported constraint
+			AP_DTRL_ASSERT(false); // unsupported constraint
 			break;
 	}
 	return err;
@@ -340,7 +341,7 @@ Eigen::VectorXd cIKSolver::BuildErr(const Eigen::MatrixXd& joint_mat, const Eige
 
 Eigen::VectorXd cIKSolver::BuildConsPosErr(const Eigen::MatrixXd& joint_mat, const Eigen::VectorXd& pose, const tConsDesc& cons_desc, double clamp_dist)
 {
-	assert(static_cast<int>(cons_desc(eConsDescType)) == eConsTypePos);
+	AP_DTRL_ASSERT(static_cast<int>(cons_desc(eConsDescType)) == eConsTypePos);
 
 	int parent_id = static_cast<int>(cons_desc(eConsDescParam0));
 	tVector attach_pt = tVector(cons_desc(eConsDescParam1), cons_desc(eConsDescParam2), 0.f, 0.f);
@@ -357,7 +358,7 @@ Eigen::VectorXd cIKSolver::BuildConsPosErr(const Eigen::MatrixXd& joint_mat, con
 
 Eigen::VectorXd cIKSolver::BuildConsPosXErr(const Eigen::MatrixXd& joint_mat, const Eigen::VectorXd& pose, const tConsDesc& cons_desc, double clamp_dist)
 {
-	assert(static_cast<int>(cons_desc(eConsDescType)) == eConsTypePosX);
+	AP_DTRL_ASSERT(static_cast<int>(cons_desc(eConsDescType)) == eConsTypePosX);
 
 	int parent_id = static_cast<int>(cons_desc(eConsDescParam0));
 	tVector attach_pt = tVector(cons_desc(eConsDescParam1), cons_desc(eConsDescParam2), 0.f, 0.f);
@@ -375,7 +376,7 @@ Eigen::VectorXd cIKSolver::BuildConsPosXErr(const Eigen::MatrixXd& joint_mat, co
 
 Eigen::VectorXd cIKSolver::BuildConsPosYErr(const Eigen::MatrixXd& joint_mat, const Eigen::VectorXd& pose, const tConsDesc& cons_desc, double clamp_dist)
 {
-	assert(static_cast<int>(cons_desc(eConsDescType)) == eConsTypePosY);
+	AP_DTRL_ASSERT(static_cast<int>(cons_desc(eConsDescType)) == eConsTypePosY);
 
 	int parent_id = static_cast<int>(cons_desc(eConsDescParam0));
 	tVector attach_pt = tVector(cons_desc(eConsDescParam1), cons_desc(eConsDescParam2), 0.f, 0.f);
@@ -393,7 +394,7 @@ Eigen::VectorXd cIKSolver::BuildConsPosYErr(const Eigen::MatrixXd& joint_mat, co
 
 Eigen::VectorXd cIKSolver::BuildConsThetaErr(const Eigen::MatrixXd& joint_mat, const Eigen::VectorXd& pose, const tConsDesc& cons_desc)
 {
-	assert(static_cast<int>(cons_desc(eConsDescType)) == eConsTypeTheta);
+	AP_DTRL_ASSERT(static_cast<int>(cons_desc(eConsDescType)) == eConsTypeTheta);
 
 	int joint_id = static_cast<int>(cons_desc(eConsDescParam0));
 	double tar_theta = cons_desc(eConsDescParam1);
@@ -407,7 +408,7 @@ Eigen::VectorXd cIKSolver::BuildConsThetaErr(const Eigen::MatrixXd& joint_mat, c
 
 Eigen::VectorXd cIKSolver::BuildConsThetaWorldErr(const Eigen::MatrixXd& joint_mat, const Eigen::VectorXd& pose, const tConsDesc& cons_desc)
 {
-	assert(static_cast<int>(cons_desc(eConsDescType)) == eConsTypeThetaWorld);
+	AP_DTRL_ASSERT(static_cast<int>(cons_desc(eConsDescType)) == eConsTypeThetaWorld);
 
 	int joint_id = static_cast<int>(cons_desc(eConsDescParam0));
 	double tar_theta = cons_desc(eConsDescParam1);
@@ -486,7 +487,7 @@ Eigen::MatrixXd cIKSolver::BuildJacob(const Eigen::MatrixXd& joint_mat, const Ei
 			J = BuildConsThetaWorldJacob(joint_mat, pose, cons_desc);
 			break;
 		default:
-			assert(false); // unsupported constraint
+			AP_DTRL_ASSERT(false); // unsupported constraint
 			break;
 	}
 	return J;
@@ -494,7 +495,7 @@ Eigen::MatrixXd cIKSolver::BuildJacob(const Eigen::MatrixXd& joint_mat, const Ei
 
 Eigen::MatrixXd cIKSolver::BuildConsPosJacob(const Eigen::MatrixXd& joint_mat, const Eigen::VectorXd& pose, const tConsDesc& cons_desc)
 {
-	assert(static_cast<int>(cons_desc(eConsDescType)) == eConsTypePos);
+	AP_DTRL_ASSERT(static_cast<int>(cons_desc(eConsDescType)) == eConsTypePos);
 
 	int num_joints = static_cast<int>(joint_mat.rows());
 	int parent_id = static_cast<int>(cons_desc(eConsDescParam0));
@@ -554,7 +555,7 @@ Eigen::MatrixXd cIKSolver::BuildConsPosJacob(const Eigen::MatrixXd& joint_mat, c
 
 Eigen::MatrixXd cIKSolver::BuildConsPosXJacob(const Eigen::MatrixXd& joint_mat, const Eigen::VectorXd& pose, const tConsDesc& cons_desc)
 {
-	assert(static_cast<int>(cons_desc(eConsDescType)) == eConsTypePosX);
+	AP_DTRL_ASSERT(static_cast<int>(cons_desc(eConsDescType)) == eConsTypePosX);
 
 	int num_joints = static_cast<int>(joint_mat.rows());
 	int parent_id = static_cast<int>(cons_desc(eConsDescParam0));
@@ -607,7 +608,7 @@ Eigen::MatrixXd cIKSolver::BuildConsPosXJacob(const Eigen::MatrixXd& joint_mat, 
 
 Eigen::MatrixXd cIKSolver::BuildConsPosYJacob(const Eigen::MatrixXd& joint_mat, const Eigen::VectorXd& pose, const tConsDesc& cons_desc)
 {
-	assert(static_cast<int>(cons_desc(eConsDescType)) == eConsTypePosY);
+	AP_DTRL_ASSERT(static_cast<int>(cons_desc(eConsDescType)) == eConsTypePosY);
 
 	int num_joints = static_cast<int>(joint_mat.rows());
 	int parent_id = static_cast<int>(cons_desc(eConsDescParam0));
@@ -660,7 +661,7 @@ Eigen::MatrixXd cIKSolver::BuildConsPosYJacob(const Eigen::MatrixXd& joint_mat, 
 
 Eigen::MatrixXd cIKSolver::BuildConsThetaJacob(const Eigen::MatrixXd& joint_mat, const Eigen::VectorXd& pose, const tConsDesc& cons_desc)
 {
-	assert(static_cast<int>(cons_desc(eConsDescType)) == eConsTypeTheta);
+	AP_DTRL_ASSERT(static_cast<int>(cons_desc(eConsDescType)) == eConsTypeTheta);
 
 	int num_joints = static_cast<int>(joint_mat.rows());
 	int joint_id = static_cast<int>(cons_desc(eConsDescParam0));
@@ -677,7 +678,7 @@ Eigen::MatrixXd cIKSolver::BuildConsThetaJacob(const Eigen::MatrixXd& joint_mat,
 
 Eigen::MatrixXd cIKSolver::BuildConsThetaWorldJacob(const Eigen::MatrixXd& joint_mat, const Eigen::VectorXd& pose, const tConsDesc& cons_desc)
 {
-	assert(static_cast<int>(cons_desc(eConsDescType)) == eConsTypeThetaWorld);
+	AP_DTRL_ASSERT(static_cast<int>(cons_desc(eConsDescType)) == eConsTypeThetaWorld);
 
 	int num_joints = static_cast<int>(joint_mat.rows());
 	int joint_id = static_cast<int>(cons_desc(eConsDescParam0));
@@ -705,7 +706,7 @@ Eigen::MatrixXd cIKSolver::BuildConsThetaWorldJacob(const Eigen::MatrixXd& joint
 
 int cIKSolver::CountConsDim(const Eigen::MatrixXd& cons_mat)
 {
-	assert(cons_mat.cols() == eConsDescMax);
+	AP_DTRL_ASSERT(cons_mat.cols() == eConsDescMax);
 	int count = 0;
 	int num_cons = static_cast<int>(cons_mat.rows());
 	for (int c = 0; c < num_cons; ++c)
@@ -730,7 +731,7 @@ int cIKSolver::GetConsDim(const tConsDesc& cons_desc)
 		case eConsTypeThetaWorld:
 			return 1;
 		default:
-			assert(false); // unsupported constraint
+			AP_DTRL_ASSERT(false); // unsupported constraint
 			break;
 	}
 	return 0;

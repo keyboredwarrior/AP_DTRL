@@ -1,5 +1,6 @@
 #include "SpAlg.h"
 #include <iostream>
+#include "util/AssertUtil.h"
 
 #ifdef _LINUX_
 	// Should initilize variables in cpp
@@ -62,7 +63,7 @@ cSpAlg::tSpVec cSpAlg::CrossM(const tSpVec& sv, const tSpVec& m)
 
 Eigen::MatrixXd cSpAlg::CrossMs(const tSpVec& sv, const Eigen::MatrixXd& ms)
 {
-	assert(ms.rows() == gSpVecSize);
+	AP_DTRL_ASSERT(ms.rows() == gSpVecSize);
 	Eigen::MatrixXd result(gSpVecSize, ms.cols());
 	for (int i = 0; i < ms.cols(); ++i)
 	{
@@ -87,7 +88,7 @@ cSpAlg::tSpVec cSpAlg::CrossF(const tSpVec& sv, const tSpVec& f)
 
 Eigen::MatrixXd cSpAlg::CrossFs(const tSpVec& sv, const Eigen::MatrixXd& fs)
 {
-	assert(fs.rows() == gSpVecSize);
+	AP_DTRL_ASSERT(fs.rows() == gSpVecSize);
 	Eigen::MatrixXd result(gSpVecSize, fs.cols());
 	for (int i = 0; i < fs.cols(); ++i)
 	{
@@ -260,7 +261,7 @@ cSpAlg::tSpVec cSpAlg::ApplyTransF(const tSpTrans& X, const tSpVec& sv)
 
 Eigen::MatrixXd cSpAlg::ApplyTransM(const tSpTrans& X, const Eigen::MatrixXd& sm)
 {
-	assert(sm.rows() == gSpVecSize);
+	AP_DTRL_ASSERT(sm.rows() == gSpVecSize);
 	Eigen::MatrixXd result(gSpVecSize, sm.cols());
 	for (int i = 0; i < sm.cols(); ++i)
 	{
@@ -272,7 +273,7 @@ Eigen::MatrixXd cSpAlg::ApplyTransM(const tSpTrans& X, const Eigen::MatrixXd& sm
 
 Eigen::MatrixXd cSpAlg::ApplyTransF(const tSpTrans& X, const Eigen::MatrixXd& sm)
 {
-	assert(sm.rows() == gSpVecSize);
+	AP_DTRL_ASSERT(sm.rows() == gSpVecSize);
 	Eigen::MatrixXd result(gSpVecSize, sm.cols());
 	for (int i = 0; i < sm.cols(); ++i)
 	{
@@ -311,7 +312,7 @@ cSpAlg::tSpVec cSpAlg::ApplyInvTransF(const tSpTrans& X, const tSpVec& sv)
 
 Eigen::MatrixXd cSpAlg::ApplyInvTransM(const tSpTrans& X, const Eigen::MatrixXd& sm)
 {
-	assert(sm.rows() == gSpVecSize);
+	AP_DTRL_ASSERT(sm.rows() == gSpVecSize);
 	Eigen::MatrixXd result(sm.rows(), sm.cols());
 	for (int i = 0; i < sm.cols(); ++i)
 	{
@@ -323,7 +324,7 @@ Eigen::MatrixXd cSpAlg::ApplyInvTransM(const tSpTrans& X, const Eigen::MatrixXd&
 
 Eigen::MatrixXd cSpAlg::ApplyInvTransF(const tSpTrans& X, const Eigen::MatrixXd& sm)
 {
-	assert(sm.rows() == gSpVecSize);
+	AP_DTRL_ASSERT(sm.rows() == gSpVecSize);
 	Eigen::MatrixXd result(sm.rows(), sm.cols());
 	for (int i = 0; i < sm.cols(); ++i)
 	{
@@ -346,12 +347,12 @@ cSpAlg::tSpTrans cSpAlg::CompTrans(const tSpTrans& X0, const tSpTrans& X1)
 
 cSpAlg::tSpTrans cSpAlg::GetTrans(const Eigen::MatrixXd& trans_arr, int j)
 {
-	assert(trans_arr.rows() >= gSVTransRows);
-	assert((trans_arr.rows() % gSVTransRows) == 0);
-	assert(trans_arr.cols() == gSVTransCols);
+	AP_DTRL_ASSERT(trans_arr.rows() >= gSVTransRows);
+	AP_DTRL_ASSERT((trans_arr.rows() % gSVTransRows) == 0);
+	AP_DTRL_ASSERT(trans_arr.cols() == gSVTransCols);
 
 	int row_idx = j * gSVTransRows;
-	assert(row_idx <= trans_arr.rows() - gSVTransRows);
+	AP_DTRL_ASSERT(row_idx <= trans_arr.rows() - gSVTransRows);
 
 	tSpTrans X = trans_arr.block(row_idx, 0, gSVTransRows, gSVTransCols);
 	return X;

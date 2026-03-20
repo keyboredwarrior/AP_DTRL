@@ -1,5 +1,6 @@
 #include "RBDUtil.h"
 #include <iostream>
+#include "util/AssertUtil.h"
 
 void cRBDUtil::SolveInvDyna(const cRBDModel& model, const Eigen::VectorXd& acc, Eigen::VectorXd& out_tau)
 {
@@ -9,10 +10,10 @@ void cRBDUtil::SolveInvDyna(const cRBDModel& model, const Eigen::VectorXd& acc, 
 	const Eigen::VectorXd& pose = model.GetPose();
 	const Eigen::VectorXd& vel = model.GetVel();
 
-	assert(joint_mat.rows() == body_defs.rows());
-	assert(pose.rows() == vel.rows());
-	assert(pose.rows() == acc.rows());
-	assert(cKinTree::GetNumDof(joint_mat) == pose.rows());
+	AP_DTRL_ASSERT(joint_mat.rows() == body_defs.rows());
+	AP_DTRL_ASSERT(pose.rows() == vel.rows());
+	AP_DTRL_ASSERT(pose.rows() == acc.rows());
+	AP_DTRL_ASSERT(cKinTree::GetNumDof(joint_mat) == pose.rows());
 
 	cSpAlg::tSpVec vel0 = cSpAlg::tSpVec::Zero();
 	cSpAlg::tSpVec acc0 = cSpAlg::BuildSV(tVector::Zero(), -gravity);
@@ -531,7 +532,7 @@ void cRBDUtil::CalcCoM(const cRBDModel& model, tVector& out_com, tVector& out_ve
 		}
 	}
 
-	assert(total_mass > 0);
+	AP_DTRL_ASSERT(total_mass > 0);
 	out_com /= total_mass;
 	out_vel /= total_mass;
 }
@@ -539,7 +540,7 @@ void cRBDUtil::CalcCoM(const cRBDModel& model, tVector& out_com, tVector& out_ve
 cSpAlg::tSpMat cRBDUtil::BuildMomentInertia(const Eigen::MatrixXd& body_defs, int part_id)
 {
 	// inertia tensor of shape centered at the com
-	assert(cKinTree::IsValidBody(body_defs, part_id));
+	AP_DTRL_ASSERT(cKinTree::IsValidBody(body_defs, part_id));
 	cKinTree::eBodyShape shape = cKinTree::GetBodyShape(body_defs, part_id);
 
 	cSpAlg::tSpMat I;
@@ -552,7 +553,7 @@ cSpAlg::tSpMat cRBDUtil::BuildMomentInertia(const Eigen::MatrixXd& body_defs, in
 		I = BuildMomentInertiaCapsule(body_defs, part_id);
 		break;
 	default:
-		assert(false); // unsupported shape
+		AP_DTRL_ASSERT(false); // unsupported shape
 		break;
 	}
 
@@ -712,7 +713,7 @@ Eigen::MatrixXd cRBDUtil::BuildJointSubspace(const Eigen::MatrixXd& joint_mat, c
 		S = BuildJointSubspaceFixed(joint_mat, pose, j);
 		break;
 	default:
-		assert(false); // unsupported joint type;
+		AP_DTRL_ASSERT(false); // unsupported joint type;
 		break;
 	}
 	return S;
@@ -729,7 +730,7 @@ Eigen::MatrixXd cRBDUtil::BuildJointSubspaceRevolute(const Eigen::MatrixXd& join
 
 Eigen::MatrixXd cRBDUtil::BuildJointSubspacePrismatic(const Eigen::MatrixXd& joint_mat, const Eigen::VectorXd& pose, int j)
 {
-	// assert(false); // TODO: this likely doesn't work
+	// AP_DTRL_ASSERT(false); // TODO: this likely doesn't work
 	int dim = 1;
 	Eigen::MatrixXd S = Eigen::MatrixXd::Zero(cSpAlg::gSpVecSize, dim);
 
@@ -790,7 +791,7 @@ cSpAlg::tSpVec cRBDUtil::BuildCj(const Eigen::MatrixXd& joint_mat, const Eigen::
 		cj = BuildCjFixed(joint_mat, q_dot, j);
 		break;
 	default:
-		assert(false); // unsupported joint type;
+		AP_DTRL_ASSERT(false); // unsupported joint type;
 		break;
 	}
 	return cj;
@@ -854,8 +855,8 @@ void cRBDUtil::CalcGravityForce(const cRBDModel& model, Eigen::VectorXd& out_g_f
 	const tVector& gravity = model.GetGravity();
 	const Eigen::VectorXd& pose = model.GetPose();
 
-	assert(joint_mat.rows() == body_defs.rows());
-	assert(cKinTree::GetNumDof(joint_mat) == pose.rows());
+	AP_DTRL_ASSERT(joint_mat.rows() == body_defs.rows());
+	AP_DTRL_ASSERT(cKinTree::GetNumDof(joint_mat) == pose.rows());
 
 	cSpAlg::tSpVec acc0 = cSpAlg::BuildSV(tVector::Zero(), gravity);
 
