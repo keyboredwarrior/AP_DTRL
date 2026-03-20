@@ -21,6 +21,7 @@ find_package(OpenGL REQUIRED)
 find_package(Bullet REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
 find_package(jsoncpp CONFIG REQUIRED)
+find_package(GLEW CONFIG REQUIRED)
 
 # =========================
 # Torch (optional)
@@ -62,6 +63,7 @@ target_link_libraries(ap_dtrl_core PUBLIC
   glfw
   OpenGL::GL
   jsoncpp_lib
+  GLEW::GLEW
 )
 
 # =========================
