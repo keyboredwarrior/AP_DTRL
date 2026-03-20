@@ -1,5 +1,4 @@
 #include "TextureDesc.h"
-#include <assert.h>
 
 std::stack<cTextureDesc::tTexEntry> cTextureDesc::mTexStack = std::stack<cTextureDesc::tTexEntry>();
 cTextureDesc::tTexEntry::tTexEntry()

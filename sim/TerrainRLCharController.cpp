@@ -3,6 +3,7 @@
 #include <iostream>
 #include <ctime>
 #include <json/json.h>
+#include "util/AssertUtil.h"
 
 #define ENABLE_MAX_COORD_POSE
 
@@ -151,7 +152,7 @@ void cTerrainRLCharController::NewCycleUpdate()
 
 void cTerrainRLCharController::SetParams(const Eigen::VectorXd& params)
 {
-	assert(params.size() == GetNumParams());
+	AP_DTRL_ASSERT(params.size() == GetNumParams());
 	mCurrAction.mParams = params;
 	PostProcessParams(mCurrAction.mParams);
 }
@@ -299,7 +300,7 @@ int cTerrainRLCharController::GetPoliStateOffset(ePoliState params) const
 		offset = GetPoliStateSize(ePoliStateGround) + GetPoliStateSize(ePoliStatePose);
 		break;
 	default:
-		assert(false); // unsupported poli state param
+		AP_DTRL_ASSERT(false); // unsupported poli state param
 		break;
 	}
 	return offset;
@@ -335,7 +336,7 @@ int cTerrainRLCharController::GetPoliStateSize(ePoliState params) const
 		break;
 #endif
 	default:
-		assert(false); // unsupported poli state param
+		AP_DTRL_ASSERT(false); // unsupported poli state param
 		break;
 	}
 	return size;

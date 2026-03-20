@@ -1,4 +1,5 @@
 #include "BaseControllerCacla.h"
+#include "util/AssertUtil.h"
 
 cBaseControllerCacla::cBaseControllerCacla() : cTerrainRLCharController()
 {
@@ -51,7 +52,7 @@ bool cBaseControllerCacla::LoadCriticNet(const std::string& net_file)
 	if (!succ)
 	{
 		mCriticNet.Clear();
-		assert(false);
+		AP_DTRL_ASSERT(false);
 	}
 
 	return succ;
@@ -205,7 +206,7 @@ void cBaseControllerCacla::ExploitPolicy(tAction& out_action)
 {
 	Eigen::VectorXd opt_params;
 	mNet.Eval(mPoliState, opt_params);
-	assert(opt_params.size() == GetNumOptParams());
+	AP_DTRL_ASSERT(opt_params.size() == GetNumOptParams());
 
 	out_action.mID = gInvalidIdx;
 	out_action.mParams = mCurrAction.mParams;
@@ -275,7 +276,7 @@ void cBaseControllerCacla::ApplyExpNoiseAction(tAction& out_action)
 	Eigen::VectorXd noise_scale;
 	FetchExpNoiseScale(noise_scale);
 
-	assert(noise_scale.size() == num_opt_params);
+	AP_DTRL_ASSERT(noise_scale.size() == num_opt_params);
 	
 	// for debugging
 	Eigen::VectorXd exp_noise = Eigen::VectorXd::Zero(num_opt_params);

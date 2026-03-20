@@ -2,6 +2,7 @@
 #include <BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h>
 #include <time.h>
 #include <iostream>
+#include "util/AssertUtil.h"
 
 const double gInvalidHeight = -std::numeric_limits<double>::infinity();
 
@@ -150,8 +151,8 @@ int cGroundVar2D::GetGridLength() const
 
 tVector cGroundVar2D::GetVertex(int i, int j) const
 {
-	assert(i >= 0 && i < GetGridWidth());
-	assert(j >= 0 && j < GetGridLength());
+	AP_DTRL_ASSERT(i >= 0 && i < GetGridWidth());
+	AP_DTRL_ASSERT(j >= 0 && j < GetGridLength());
 
 	const auto& min_seg = GetMinSegment();
 	int seg_idx = 0;
@@ -530,8 +531,8 @@ tVector cGroundVar2D::tSegment::GetScaling() const
 
 tVector cGroundVar2D::tSegment::GetVertex(int i, int j) const
 {
-	assert(i >= 0 && i < GetGridWidth());
-	assert(j >= 0 && j < GetGridLength());
+	AP_DTRL_ASSERT(i >= 0 && i < GetGridWidth());
+	AP_DTRL_ASSERT(j >= 0 && j < GetGridLength());
 
 	tVector origin = GetPos();
 	tVector scaling = GetScaling();

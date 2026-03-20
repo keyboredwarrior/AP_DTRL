@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include <iostream>
+#include "util/AssertUtil.h"
 // TODO: pull out into some util/platform header file.
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -217,7 +218,7 @@ tMatrix cCamera::BuildProjMatrix() const
 		proj_mat = BuildProjMatrixOrtho();
 		break;
 	default:
-		assert(false); // unsupported projection
+		AP_DTRL_ASSERT(false); // unsupported projection
 		break;
 	}
 	return proj_mat;
@@ -269,7 +270,7 @@ tVector cCamera::GetRayCastDir(const tVector& pos) const
 		dir = mFocus - mPosition;
 		break;
 	default:
-		assert(false); // unsupported projection
+		AP_DTRL_ASSERT(false); // unsupported projection
 		break;
 	}
 	dir[3] = 0;

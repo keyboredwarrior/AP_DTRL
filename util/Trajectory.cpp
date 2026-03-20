@@ -1,4 +1,5 @@
 #include "Trajectory.h"
+#include "util/AssertUtil.h"
 
 cTrajectory::cTrajectory()
 {
@@ -83,7 +84,7 @@ double cTrajectory::NormalizePhase(double t) const
 	}
 	else
 	{
-		assert(false); // unsupported wrap mode
+		AP_DTRL_ASSERT(false); // unsupported wrap mode
 	}
 
 	return norm_t;
@@ -180,7 +181,7 @@ Eigen::VectorXd cTrajectory::Unroll() const
 
 void cTrajectory::SetUnrolled(const Eigen::VectorXd& unrolled_data, int dim)
 {
-	assert(unrolled_data.size() % dim == 0);
+	AP_DTRL_ASSERT(unrolled_data.size() % dim == 0);
 	int num_anchors = static_cast<int>(unrolled_data.size()) / dim;
 	mAnchors.resize(dim, num_anchors);
 	for (int i = 0; i < num_anchors; ++i)

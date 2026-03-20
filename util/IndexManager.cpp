@@ -1,5 +1,5 @@
 #include "IndexManager.h"
-#include <assert.h>
+#include "util/AssertUtil.h"
 
 const int cIndexManager::gInvalidIndex = -1;
 
@@ -101,7 +101,7 @@ void cIndexManager::FreeIndex(int idx)
 	}
 	else
 	{
-		assert(false); // trying to free an unused index
+		AP_DTRL_ASSERT(false); // trying to free an unused index
 	}
 }
 

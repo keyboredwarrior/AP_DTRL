@@ -3,6 +3,7 @@
 
 #include "SimBox.h"
 #include "SimCapsule.h"
+#include "util/AssertUtil.h"
 
 cSimCharacter::tParams::tParams()
 {
@@ -226,7 +227,7 @@ void cSimCharacter::BuildVel(Eigen::VectorXd& out_vel) const
 
 void cSimCharacter::SetVel(const Eigen::VectorXd& vel)
 {
-	assert(vel.size() == GetNumDof());
+	AP_DTRL_ASSERT(vel.size() == GetNumDof());
 
 	// uses spatial algebra to convert generalized coordinates into
 	// velocities of each body part
@@ -330,8 +331,8 @@ tVector cSimCharacter::CalcJointPos(int joint_id) const
 	else
 	{
 		int parent_id = cKinTree::GetParent(mJointMat, joint_id);
-		assert(parent_id != cKinTree::gInvalidJointID);
-		assert(IsValidBodyPart(parent_id));
+		AP_DTRL_ASSERT(parent_id != cKinTree::gInvalidJointID);
+		AP_DTRL_ASSERT(IsValidBodyPart(parent_id));
 
 		tVector attach_pt = cKinTree::GetScaledAttachPt(mJointMat, joint_id);
 		tVector part_attach_pt = cKinTree::GetBodyAttachPt(mBodyDefs, parent_id);
@@ -359,8 +360,8 @@ tVector cSimCharacter::CalcJointVel(int joint_id) const
 	else
 	{
 		int parent_id = cKinTree::GetParent(mJointMat, joint_id);
-		assert(parent_id != cKinTree::gInvalidJointID);
-		assert(IsValidBodyPart(parent_id));
+		AP_DTRL_ASSERT(parent_id != cKinTree::gInvalidJointID);
+		AP_DTRL_ASSERT(IsValidBodyPart(parent_id));
 
 		tVector attach_pt = cKinTree::GetScaledAttachPt(mJointMat, joint_id);
 		tVector part_attach_pt = cKinTree::GetBodyAttachPt(mBodyDefs, parent_id);
@@ -382,8 +383,8 @@ void cSimCharacter::CalcJointWorldRotation(int joint_id, tVector& out_axis, doub
 	else
 	{
 		int parent_id = cKinTree::GetParent(mJointMat, joint_id);
-		assert(parent_id != cKinTree::gInvalidJointID);
-		assert(IsValidBodyPart(parent_id));
+		AP_DTRL_ASSERT(parent_id != cKinTree::gInvalidJointID);
+		AP_DTRL_ASSERT(IsValidBodyPart(parent_id));
 
 		out_axis = tVector(0, 0, 1, 0);
 		const auto& parent_part = GetBodyPart(parent_id);
@@ -582,7 +583,7 @@ int cSimCharacter::GetState() const
 	{
 		return mController->GetState();
 	}
-	assert(false);
+	AP_DTRL_ASSERT(false);
 	return 0;
 }
 
@@ -592,7 +593,7 @@ double cSimCharacter::GetPhase() const
 	{
 		return mController->GetPhase();
 	}
-	assert(false);
+	AP_DTRL_ASSERT(false);
 	return 0;
 }
 
@@ -636,7 +637,7 @@ void cSimCharacter::EnableController(bool enable)
 
 void cSimCharacter::ApplyControlForces(const Eigen::VectorXd& tau)
 {
-	assert(tau.size() == GetNumDof());
+	AP_DTRL_ASSERT(tau.size() == GetNumDof());
 	for (int j = 0; j < GetNumJoints(); ++j)
 	{
 		cJoint& joint = GetJoint(j);
@@ -645,7 +646,7 @@ void cSimCharacter::ApplyControlForces(const Eigen::VectorXd& tau)
 			int param_offset = GetParamOffset(j);
 			int param_size = GetParamSize(j);
 			auto curr_tau = tau.segment(param_offset, param_size);
-			assert(curr_tau.size() == 1);
+			AP_DTRL_ASSERT(curr_tau.size() == 1);
 			tVector torque = tVector(0, 0, curr_tau[0], 0);
 
 			joint.AddTorque(torque);
@@ -719,7 +720,7 @@ bool cSimCharacter::LoadBodyDefs(const std::string& char_file, Eigen::MatrixXd& 
 	bool succ = cKinTree::LoadBodyDefs(char_file, out_body_defs);
 	int num_joints = GetNumJoints();
 	int num_body_defs = static_cast<int>(out_body_defs.rows());
-	assert(num_joints == num_body_defs);
+	AP_DTRL_ASSERT(num_joints == num_body_defs);
 	return succ;
 }
 
@@ -923,7 +924,7 @@ void cSimCharacter::BuildRootConsFactor(cKinTree::eJointType joint_type, tVector
 		out_angular_factor = tVector::Zero();
 		break;
 	default:
-		assert(false); // unsupported joint type
+		AP_DTRL_ASSERT(false); // unsupported joint type
 		break;
 	}
 }

@@ -1,4 +1,5 @@
 #include "BaseControllerMACE.h"
+#include "util/AssertUtil.h"
 
 #define ENABLE_BOLTZMANN_EXP
 //#define ENABLE_LAYER_NOISE
@@ -80,7 +81,7 @@ void cBaseControllerMACE::BuildNNOutputOffsetScale(Eigen::VectorXd& out_offset, 
 
 	int output_size = GetNetOutputSize();
 	int num_frags = GetNumActionFrags();
-	assert(output_size == num_frags + num_frags * action_frag_offset.size());
+	AP_DTRL_ASSERT(output_size == num_frags + num_frags * action_frag_offset.size());
 
 	out_offset = Eigen::VectorXd::Zero(output_size);
 	out_scale = Eigen::VectorXd::Ones(output_size);
@@ -340,7 +341,7 @@ void cBaseControllerMACE::BuildActorAction(const Eigen::VectorXd& params, int a_
 {
 	Eigen::VectorXd action_frag;
 	GetFrag(params, a_id, action_frag);
-	assert(action_frag.size() == GetNumOptParams());
+	AP_DTRL_ASSERT(action_frag.size() == GetNumOptParams());
 
 	out_action.mID = a_id;
 	out_action.mParams = mCurrAction.mParams;
@@ -425,7 +426,7 @@ void cBaseControllerMACE::ApplyExpNoiseState(tAction& out_action)
 	}
 	else
 	{
-		assert(false); // invalid layer
+		AP_DTRL_ASSERT(false); // invalid layer
 	}
 }
 
@@ -469,7 +470,7 @@ void cBaseControllerMACE::ApplyExpNoiseAction(tAction& out_action)
 
 	Eigen::VectorXd noise_scale;
 	FetchExpNoiseScale(noise_scale);
-	assert(noise_scale.size() == action_size);
+	AP_DTRL_ASSERT(noise_scale.size() == action_size);
 
 	double cov_scale = 10.0 / num_samples;
 	Eigen::MatrixXd cov_mat = reg * Eigen::MatrixXd::Identity(action_size, action_size);
@@ -495,7 +496,7 @@ void cBaseControllerMACE::ApplyExpNoiseAction(tAction& out_action)
 	Eigen::VectorXd noise_scale;
 	FetchExpNoiseScale(noise_scale);
 
-	assert(noise_scale.size() == num_opt_params);
+	AP_DTRL_ASSERT(noise_scale.size() == num_opt_params);
 
 	// for debugging
 	Eigen::VectorXd exp_noise = Eigen::VectorXd::Zero(num_opt_params);

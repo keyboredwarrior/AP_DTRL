@@ -1,4 +1,5 @@
 #include "SimObj.h"
+#include "util/AssertUtil.h"
 
 cSimObj::cSimObj()
 	: mWorld(nullptr)
@@ -139,11 +140,11 @@ void cSimObj::RegisterContact(int contact_flags, int filter_flags)
 	if (!mContactHandle.IsValid())
 	{
 		mContactHandle = mWorld->RegisterContact(contact_flags, filter_flags);
-		assert(mContactHandle.IsValid());
+		AP_DTRL_ASSERT(mContactHandle.IsValid());
 	}
 	else
 	{
-		assert(false); // already registered contact
+		AP_DTRL_ASSERT(false); // already registered contact
 	}
 }
 

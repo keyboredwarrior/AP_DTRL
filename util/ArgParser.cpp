@@ -1,6 +1,5 @@
 #include "ArgParser.h"
 
-#include <assert.h>
 #include <fstream>
 #include <iostream>
 #include <sstream>

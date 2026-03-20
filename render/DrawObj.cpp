@@ -1,4 +1,5 @@
 #include "DrawObj.h"
+#include "util/AssertUtil.h"
 
 void cDrawObj::Draw(const cSimObj* obj, cDrawUtil::eDrawMode draw_mode)
 {
@@ -15,7 +16,7 @@ void cDrawObj::Draw(const cSimObj* obj, cDrawUtil::eDrawMode draw_mode)
 		DrawCapsule(reinterpret_cast<const cSimCapsule*>(obj), draw_mode);
 		break;
 	default:
-		assert(false); // unsupported shape
+		AP_DTRL_ASSERT(false); // unsupported shape
 		break;
 	}
 }

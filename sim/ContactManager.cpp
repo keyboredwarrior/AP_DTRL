@@ -2,6 +2,7 @@
 #include "sim/World.h"
 #include "SimObj.h"
 #include <iostream>
+#include "util/AssertUtil.h"
 
 const int cContactManager::gInvalidID = -1;
 
@@ -112,13 +113,13 @@ cContactManager::tContactHandle cContactManager::RegisterContact(int contact_fla
 	entry.mFlags = contact_flags;
 	entry.mFilterFlags = filter_flags;
 
-	assert(handle.IsValid());
+	AP_DTRL_ASSERT(handle.IsValid());
 	return handle;
 }
 
 void cContactManager::UpdateContact(const cContactManager::tContactHandle& handle)
 {
-	assert(handle.IsValid());
+	AP_DTRL_ASSERT(handle.IsValid());
 	tContactEntry& entry = mContactEntries[handle.mID];
 	entry.mFlags = handle.mFlags;
 	entry.mFilterFlags = handle.mFilterFlags;

@@ -4,6 +4,7 @@
 #include "util/Util.h"
 #include "sim/SimCharacter.h"
 #include "sim/RBDUtil.h"
+#include "util/AssertUtil.h"
 
 cImpPDController::cImpPDController()
 {
@@ -33,7 +34,7 @@ void cImpPDController::Init(cSimCharacter* character, const std::shared_ptr<cRBD
 	cController::Init(character);
 	int num_joints = mChar->GetNumJoints();
 	mPDCtrls.resize(num_joints);
-	assert(pd_params.rows() == num_joints);
+	AP_DTRL_ASSERT(pd_params.rows() == num_joints);
 
 	mGravity = gravity;
 	mRBDModel = model;
@@ -221,13 +222,13 @@ void cImpPDController::UpdateRBDModel()
 
 cPDController& cImpPDController::GetPDCtrl(int joint_id)
 {
-	assert(joint_id >= 0 && joint_id < GetNumJoints());
+	AP_DTRL_ASSERT(joint_id >= 0 && joint_id < GetNumJoints());
 	return mPDCtrls[joint_id];
 }
 
 const cPDController& cImpPDController::GetPDCtrl(int joint_id) const
 {
-	assert(joint_id >= 0 && joint_id < GetNumJoints());
+	AP_DTRL_ASSERT(joint_id >= 0 && joint_id < GetNumJoints());
 	return mPDCtrls[joint_id];
 }
 

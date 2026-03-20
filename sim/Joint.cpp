@@ -1,5 +1,6 @@
 #include "Joint.h"
 #include <iostream>
+#include "util/AssertUtil.h"
 
 const double gDefaultTorqueLimit = std::numeric_limits<double>::infinity();
 
@@ -29,7 +30,7 @@ void cJoint::Init(std::shared_ptr<cWorld>& world, std::shared_ptr<cSimObj> paren
 	tMatrix trans = cMathUtil::TranslateMat(mParams.mAnchor1);
 	mJointChildTrans = trans * rot;
 
-	assert(IsValid());
+	AP_DTRL_ASSERT(IsValid());
 }
 
 void cJoint::Clear()
@@ -64,7 +65,7 @@ tVector cJoint::CalcAxisWorld() const
 
 const tVector& cJoint::GetAxisRel() const
 {
-	assert(mParams.mType == cWorld::eJointTypeHinge ||
+	AP_DTRL_ASSERT(mParams.mType == cWorld::eJointTypeHinge ||
 			// TODO Might need to change this method to return prismatic axis instead
 			(mParams.mType == cWorld::eJointTypePrismatic));
 	return mParams.mAxis;
@@ -77,7 +78,7 @@ bool cJoint::HasParent() const
 
 void cJoint::CalcRotation(tVector& out_axis, double& out_theta) const
 {
-	assert(IsValid());
+	AP_DTRL_ASSERT(IsValid());
 	switch (mParams.mType)
 	{
 	case cWorld::eJointTypeHinge:

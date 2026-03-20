@@ -1,4 +1,5 @@
 #include "NNController.h"
+#include "util/AssertUtil.h"
 
 cNNController::cNNController()
 {
@@ -71,7 +72,7 @@ bool cNNController::LoadNet(const std::string& net_file)
 	if (!succ)
 	{
 		mNet.Clear();
-		assert(false);
+		AP_DTRL_ASSERT(false);
 	}
 
 	return succ;

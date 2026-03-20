@@ -1,5 +1,6 @@
 #include "MathUtil.h"
 #include <time.h>
+#include "util/AssertUtil.h"
 
 cRand cMathUtil::gRand = cRand();
 
@@ -89,7 +90,7 @@ tMatrix cMathUtil::ScaleMat(const tVector& scale)
 
 tMatrix cMathUtil::RotateMat(const tVector& axis, double theta)
 {
-	assert(std::abs(axis.squaredNorm() - 1) < 0.01);
+	AP_DTRL_ASSERT(std::abs(axis.squaredNorm() - 1) < 0.01);
 	
 	double c = std::cos(theta);
 	double s = std::sin(theta);
@@ -181,7 +182,7 @@ double cMathUtil::AddAverage(double avg0, int count0, double avg1, int count1)
 
 void cMathUtil::CalcSoftmax(const Eigen::VectorXd& vals, double temp, Eigen::VectorXd& out_prob)
 {
-	assert(out_prob.size() == vals.size());
+	AP_DTRL_ASSERT(out_prob.size() == vals.size());
 	int num_vals = static_cast<int>(vals.size());
 	double sum = 0;
 	double max_val = vals.maxCoeff();

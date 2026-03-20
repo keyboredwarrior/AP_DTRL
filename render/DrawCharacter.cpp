@@ -2,6 +2,7 @@
 #include "DrawKinTree.h"
 #include "render/DrawUtil.h"
 #include <iostream>
+#include "util/AssertUtil.h"
 
 void cDrawCharacter::Draw(const cCharacter& character, double link_width, const tVector& fill_col, const tVector& line_col)
 {
@@ -25,7 +26,7 @@ void cDrawCharacter::DrawShape(const cCharacter& character, const cKinTree::tDra
 	case cKinTree::eBodyShapeNULL:
 		break;
 	default:
-		assert(false); // unsupported draw shape
+		AP_DTRL_ASSERT(false); // unsupported draw shape
 		break;
 	}
 }
