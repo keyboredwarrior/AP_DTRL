@@ -855,7 +855,8 @@ void cSimCharacter::BuildConstraints(cWorld::ePlaneCons plane_cons)
 
 				cWorld::tJointParams cons_params;
 				// cons_params.mType = cWorld::eJointTypeHinge;
-				cons_params.mType = (cWorld::eJointType) (int) joint_desc(cKinTree::eJointDescType);
+				cons_params.mType = static_cast<cWorld::eJointType>(
+					static_cast<int>(joint_desc(cKinTree::eJointDescType)));
 				// cons_params.mType = curr_part->GetType(); // wrong kind of type
 				cons_params.mAnchor0 = pos_parent;
 				cons_params.mAnchor1 = pos_child;

@@ -14,7 +14,8 @@ void cDrawCharacter::Draw(const cCharacter& character, double link_width, const 
 
 void cDrawCharacter::DrawShape(const cCharacter& character, const cKinTree::tDrawShapeDef& def, const tVector& fill_tint, const tVector& line_col)
 {
-	cKinTree::eBodyShape shape = static_cast<cKinTree::eBodyShape>((int) def[cKinTree::eDrawShapeShape]);
+	cKinTree::eBodyShape shape = static_cast<cKinTree::eBodyShape>(
+		static_cast<int>(def[cKinTree::eDrawShapeShape]));
 	switch (shape)
 	{
 	case cKinTree::eBodyShapeBox:

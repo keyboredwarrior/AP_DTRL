@@ -18,7 +18,7 @@ std::string cJsonUtil::BuildVectorJson(const Eigen::VectorXd& vec)
 bool cJsonUtil::ReadVectorJson(const Json::Value& root, Eigen::VectorXd& out_vec)
 {
 	bool succ = false;
-	int num_vals = root.size();
+	int num_vals = static_cast<int>(root.size());
 	
 	if (root.isArray())
 	{

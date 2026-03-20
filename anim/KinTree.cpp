@@ -127,7 +127,7 @@ bool cKinTree::LoadBodyDefs(const std::string& char_file, Eigen::MatrixXd& out_b
 		if (!root[gBodyDefsKey].isNull())
 		{
 			Json::Value body_defs = root.get(gBodyDefsKey, 0);
-			int num_bodies = body_defs.size();
+			int num_bodies = static_cast<int>(body_defs.size());
 
 			succ = true;
 			out_body_defs.resize(num_bodies, eBodyParamMax);
@@ -225,7 +225,7 @@ bool cKinTree::LoadDrawShapeDefs(const std::string& char_file, Eigen::MatrixXd& 
 		if (!root[gDrawShapeDefsKey].isNull())
 		{
 			Json::Value shape_defs = root.get(gDrawShapeDefsKey, 0);
-			int num_shapes = shape_defs.size();
+			int num_shapes = static_cast<int>(shape_defs.size());
 
 			succ = true;
 			out_draw_defs.resize(num_shapes, eDrawShapeParamMax);
@@ -414,7 +414,7 @@ bool cKinTree::Load(const Json::Value& root, Eigen::MatrixXd& out_joint_mat)
 	if (!root[gJointsKey].isNull())
 	{
 		Json::Value joints = root[gJointsKey];
-		int num_joints = joints.size();
+		int num_joints = static_cast<int>(joints.size());
 
 		out_joint_mat.resize(num_joints, eJointDescMax);
 		

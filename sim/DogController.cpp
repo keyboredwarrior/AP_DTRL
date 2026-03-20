@@ -720,7 +720,7 @@ bool cDogController::ParseControllerFiles(const Json::Value& root)
 	std::vector<std::string> files;
 	AP_DTRL_ASSERT(root.isArray());
 
-	int num_files = root.size();
+	int num_files = static_cast<int>(root.size());
 	files.resize(num_files);
 	for (int f = 0; f < num_files; ++f)
 	{
@@ -735,7 +735,7 @@ bool cDogController::ParseActions(const Json::Value& root)
 	bool succ = true;
 	AP_DTRL_ASSERT(root.isArray());
 
-	int num_actions = root.size();
+	int num_actions = static_cast<int>(root.size());
 	for (int a = 0; a < num_actions; ++a)
 	{
 		const Json::Value& curr_action = root.get(a, 0);
