@@ -121,7 +121,7 @@ bool cMotion::LoadJson(const Json::Value& root)
 		{
 			Json::Value frames = motion.get(gFrameKey, 0);
 			AP_DTRL_ASSERT(frames.isArray());
-			int num_frames = frames.size();
+			int num_frames = static_cast<int>(frames.size());
 			
 			int data_size = 0;
 			if (num_frames > 0)
@@ -157,7 +157,7 @@ bool cMotion::ParseFrameJson(const Json::Value& root, Eigen::VectorXd& out_frame
 	bool succ = false;
 	if (root.isArray())
 	{
-		int data_size = root.size();
+		int data_size = static_cast<int>(root.size());
 		out_frame.resize(data_size);
 		for (int i = 0; i < data_size; ++i)
 		{

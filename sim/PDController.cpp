@@ -29,7 +29,7 @@ bool cPDController::LoadParams(const std::string& file, Eigen::MatrixXd& out_buf
 		if (!root[gPDControllersKey].isNull())
 		{
 			const Json::Value& pd_controllers = root[gPDControllersKey];
-			int num_ctrls = pd_controllers.size();
+			int num_ctrls = static_cast<int>(pd_controllers.size());
 			out_buffer.resize(num_ctrls, eParamMax);
 
 			for (int i = 0; i < num_ctrls; ++i)
