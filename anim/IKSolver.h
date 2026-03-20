@@ -1,6 +1,6 @@
 #pragma once
 
-#include "external/eigen/Eigen/Dense"
+#include "Eigen/Dense"
 #include <random>
 #include <time.h>
 #include "util/MathUtil.h"
